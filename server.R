@@ -37,12 +37,12 @@ stp_p <- stps%>%
     theme(axis.line = element_blank(),
           legend.position = "none")
 
-find_stp_name_from_event_data <- function(ed) {
-    if (is.null(ed)) {
+find_stp_name_from_event_data <- function(event) {
+    if (is.null(event)) {
         return(NULL)
     }
 
-    point <- st_point(c(ed$x, ed$y))
+    point <- st_point(c(event$x, event$y))
     find <- stps[st_contains(stps, point, sparse = FALSE), ]
 
     if (nrow(find) == 1) {
@@ -62,8 +62,8 @@ shinyServer(function(input, output, session) {
     })
 
     output$stpName <- renderText({
-        ed <- event_data("plotly_hover")
-        stp <- find_stp_name_from_event_data(ed)
+        event <- event_data("plotly_hover")
+        stp <- find_stp_name_from_event_data(event)
         if (is.null(stp)) {
             return("")
         }
@@ -71,8 +71,8 @@ shinyServer(function(input, output, session) {
     })
 
     observeEvent(event_data("plotly_click"), {
-        ed <- event_data("plotly_click")
-        stp <- find_stp_name_from_event_data(ed)
+        event <- event_data("plotly_click")
+        stp <- find_stp_name_from_event_data(event)
         if (!is.null(stp)) {
             session$sendCustomMessage(type = "openStpFile",
                                       message = stp$url)
