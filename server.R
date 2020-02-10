@@ -24,7 +24,7 @@ stps <- st_read(stp_file,
                         col_types = "ccc"),
                by = "stp17cd")
 
-stp_p <- stps%>%
+stp_p <- stps %>%
     ggplot() +
     geom_sf(aes(fill = colour)) +
     scale_fill_manual(values = c("1" = "#fbb4ae",
